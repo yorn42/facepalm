@@ -1,0 +1,12 @@
+facepalm - enduser version of succulent, a facebook stalking tool by yorn.
+
+This Version uses sqlite in memory, so no database is created.
+
+The graph is created by gephi-toolkit.
+
+You need to specify a config file and a Facebook ID (numeric).
+
+config file layout:
+gexfpath=/tmp
+cookie=xs=
+cookie=c_user=
