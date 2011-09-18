@@ -18,8 +18,14 @@ public class WriteToFile {
 			dir.mkdirs();
 			fw = new FileWriter(dir.getAbsolutePath() + "/fb.gexf");
 			fw.write(content);
-			fu.copyFileToDirectory(new File("config/GexfExplorer1.0.swf"), dir);
-			fu.copyFileToDirectory(new File("config/index.html"), dir);
+			try {
+				fu.copyFileToDirectory(new File("config/GexfExplorer1.0.swf"),
+						dir);
+				fu.copyFileToDirectory(new File("config/index.html"), dir);
+			} catch (IOException io) {
+				System.err
+						.println("[X] Could not copy files to display data from config/ directory");
+			}
 		} catch (IOException e) {
 			System.err.println("[X] Could not write to file!!");
 			e.printStackTrace();
