@@ -10,26 +10,32 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SQLiteHelper {
-	
+
 	private Connection connect = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	
-	public SQLiteHelper() throws ClassNotFoundException,
-			SQLException {
+
+	public SQLiteHelper() throws ClassNotFoundException, SQLException {
 		Class.forName("org.sqlite.JDBC");
+		// use in memory database
 		connect = DriverManager.getConnection("jdbc:sqlite::memory:");
+		// drop everything in case it exists (e.g. we should ever use a file as
+		// database)
 		Statement statement = connect.createStatement();
 		statement.executeUpdate("drop table if exists users");
 		statement.executeUpdate("drop table if exists friends");
 		statement.executeUpdate("drop table if exists nodes");
 		statement.executeUpdate("drop table if exists edges");
-	    statement.executeUpdate("create table users (id integer PRIMARY KEY AUTOINCREMENT, name string, fbid string, sex integer, single string)");
-	    statement.executeUpdate("create table friends (id integer PRIMARY KEY AUTOINCREMENT, userid string, fbid string, friendfbid string)");
-	    statement.executeUpdate("create table nodes (label string, url string, id string, sex varchar, single string)");
-	    statement.executeUpdate("create table edges (source string, target string, weight integer, name string)");
+		statement
+				.executeUpdate("create table users (id integer PRIMARY KEY AUTOINCREMENT, name string, fbid string, sex integer, single string)");
+		statement
+				.executeUpdate("create table friends (id integer PRIMARY KEY AUTOINCREMENT, userid string, fbid string, friendfbid string)");
+		statement
+				.executeUpdate("create table nodes (label string, url string, id string, sex varchar, single string)");
+		statement
+				.executeUpdate("create table edges (source string, target string, weight integer, name string)");
 	}
-	
+
 	public void die() {
 		try {
 			connect.close();
@@ -37,7 +43,12 @@ public class SQLiteHelper {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Exports the data from users and friends table to the gephi db.
+	 * 
+	 * @throws SQLException
+	 */
 	public void createGraphDB() throws SQLException {
 		String nodes = "insert into nodes(id,label,url,sex,single) select fbid,name,'http://www.facebook.com/profile.php?id='||fbid,sex,single from users;";
 		String edges = "insert into edges select distinct users.fbid as source, friends.friendfbid as target, '5' as weight, 'knows' as name from users join friends where friends.userid=users.id";
@@ -47,7 +58,13 @@ public class SQLiteHelper {
 		preparedStatement.execute();
 		preparedStatement.close();
 	}
-	
+
+	/**
+	 * Insert all users into the db.
+	 * 
+	 * @param details
+	 * @throws SQLException
+	 */
 	public synchronized void insertUser(Map<String, String> details)
 			throws SQLException {
 		String sql = "select fbid from users where fbid=?";
@@ -73,7 +90,14 @@ public class SQLiteHelper {
 		preparedStatement.close();
 
 	}
-	
+
+	/**
+	 * Insert all friends into the db.
+	 * 
+	 * @param friends
+	 * @param fbid
+	 * @throws SQLException
+	 */
 	public synchronized void insertFriends(ArrayList<String> friends,
 			String fbid) throws SQLException {
 
@@ -98,7 +122,13 @@ public class SQLiteHelper {
 		}
 
 	}
-	
+
+	/**
+	 * We want to use only one connection over all classes. In case we need to
+	 * use it somewhere else, here it is.
+	 * 
+	 * @return Connection
+	 */
 	public Connection getConnection() {
 		return this.connect;
 	}

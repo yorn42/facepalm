@@ -32,7 +32,7 @@ public class Main {
 			System.exit(1);
 		}
 
-		// Configuration of succulent
+		// configuration of succulent
 		try {
 			conf = new Config();
 			conf.doConfig(args[1]);
@@ -54,10 +54,10 @@ public class Main {
 			System.exit(1);
 		}
 
-		// GO!
+		// thread pool, 15 is a good choice.
 		ExecutorService executor = Executors.newFixedThreadPool(15);
 
-		// Get Patient Zero
+		// get Patient Zero
 		Future<ArrayList<String>> firstFriends = executor.submit(new Sucker(
 				conf, args[0], crawl, todb));
 		// used by the threads, this is the patient zero friend list
@@ -94,7 +94,7 @@ public class Main {
 
 		}
 
-		// Write Graph
+		// write graph
 		String graph = null;
 		try {
 

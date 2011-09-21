@@ -50,7 +50,7 @@ public class GraphCreator {
 		pc.newProject();
 		Workspace workspace = pc.getCurrentWorkspace();
 
-		// Get controllers and models
+		// get controllers and models
 		ImportController importController = Lookup.getDefault().lookup(
 				ImportController.class);
 		GraphModel graphModel = Lookup.getDefault()
@@ -59,12 +59,12 @@ public class GraphCreator {
 		ImporterEdgeList edgeListImporter = new ImporterEdgeList();
 		Container container = importController.importDatabase(db,
 				edgeListImporter);
-		container.setAllowAutoNode(false); // Don't create missing nodes
+		container.setAllowAutoNode(false); // don't create missing nodes
 		
-		 // Force UNDIRECTED
+		 // force UNDIRECTED
 		container.getLoader().setEdgeDefault(EdgeDefault.UNDIRECTED);
 
-		// Append imported data to GraphAPI
+		// append imported data to GraphAPI
 		importController.process(container, new DefaultProcessor(), workspace);
 		NodeIterator ni = graphModel.getGraph().getNodes().iterator();
 		while (ni.hasNext()) {
@@ -79,7 +79,7 @@ public class GraphCreator {
 			}
 		}	
 		
-		// Layout - 100 Yifan Hu passes
+		// layout - 100 Yifan Hu passes
 		layout = new YifanHuLayout(null, new StepDisplacement(1f));
 		layout.setGraphModel(graphModel);
 		layout.resetPropertiesValues();
@@ -94,7 +94,7 @@ public class GraphCreator {
 		StringWriter stringWriter = new StringWriter();
 		ec.exportWriter(stringWriter, characterExporter);
 		String result = stringWriter.toString();
-		// The Explorer cannot use "for", so we need to use "id"
+		// The swf Explorer cannot use "for", so we need to use "id"
 		result = result.replaceAll("for=\"url\"", "id=\"url\"");
 		return result;
 	}

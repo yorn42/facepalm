@@ -18,6 +18,11 @@ public class URLGetter implements Callable<String> {
 	private String userAgent = "Mozilla/Firefox";
 	private String cookie;
 
+	/**
+	 * Dirty work for getting urls.
+	 * @param url
+	 * @param cookie
+	 */
 	public URLGetter(String url, String cookie) {
 		this.cookie = cookie;
 		try {
@@ -28,6 +33,9 @@ public class URLGetter implements Callable<String> {
 	}
 
 	@Override
+	/**
+	 * Get the url.
+	 */
 	public String call() throws Exception {
 		URLConnection conn = url.openConnection();
 		conn.addRequestProperty("User-Agent", userAgent);

@@ -37,7 +37,7 @@ public class Crawler {
 			.compile("profile.ak.fbcdn.net\\\\/[a-z0-9\\-]{1,}\\\\/[0-9]{1,}_[0-9]{1,}_[0-9]{1,}_..jpg");
 	private Pattern friendCountRegex = Pattern.compile("Freunde \\([0-9]{1,4}");
 	private Pattern friendListRegex = Pattern
-			.compile("addfriend.php\\?id=[0-9]{1,}");
+			.compile("user.php\\?id=[0-9]{1,}");
 //	private Pattern defaultPic = Pattern
 //			.compile("http://profile.ak.fbcdn.net/static-ak/rsrc.php/[a-zA-Z0-9/\\.]{1,}gif");
 	private Pattern locationReplace = Pattern
@@ -54,8 +54,6 @@ public class Crawler {
 	private String getName(String search) {
 		String name = getRegex(search, findNameRegex);
 		if (name == null) {
-			// System.out.println("[X] Name not found for " + fbid + " in: "
-			// + search);
 			String temp = getRegex(search, locationReplace)
 					.replaceAll(
 							"<script>window.location.replace(\"http:\\/\\/www.facebook.com\\/",
@@ -79,7 +77,6 @@ public class Crawler {
 	private String getSex(String search) {
 		String sex = getRegex(search, sexRegex);
 		if (sex == null) {
-			// System.out.println(search);
 			return "0";
 		} else
 			return sex.replaceAll(
@@ -89,7 +86,6 @@ public class Crawler {
 	private String getSingle(String search) {
 		String single = getRegex(search, singleRegex);
 		if (single == null) {
-			// System.out.println(search);
 			return "NULL";
 		}
 		single = single.replaceAll(
@@ -238,12 +234,12 @@ public class Crawler {
 		String dirty = null;
 		for (String futureFriend : futureFriends) {
 
-			dirty += futureFriend.replaceAll("addfriend.php",
-					"\r\naddfriend.php");
+			dirty += futureFriend.replaceAll("user.php",
+					"\r\nuser.php");
 		}
 		ArrayList<String> cleaned = new ArrayList<String>();
 		for (String clean : getAllRegex(dirty, friendListRegex)) {
-			String temp = clean.replaceAll("addfriend.php\\?id=", "");
+			String temp = clean.replaceAll("user.php\\?id=", "");
 			if (!cleaned.contains(temp)) {
 				cleaned.add(temp);
 			}
@@ -280,7 +276,6 @@ public class Crawler {
 	}
 
 	private ArrayList<String> getAllRegex(String searchMe, Pattern regex) {
-		// System.out.println(searchMe);
 		Matcher m = regex.matcher(searchMe);
 		ArrayList<String> result = new ArrayList<String>();
 		while (m.find()) {

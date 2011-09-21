@@ -17,6 +17,11 @@ public class Config {
 
 	private String facebookProfileURL = "http://www.facebook.com/profile.php?id=";
 
+	/**
+	 * Configuration is done here with a config file.
+	 * @param configFile Path to the config file.
+	 * @throws IOException
+	 */
 	public void doConfig(String configFile) throws IOException {
 		if (configFile == null) {
 			configFile = "config/succulent.conf";
@@ -33,6 +38,10 @@ public class Config {
 		}
 	}
 
+	/**
+	 * Extract the cookies from the config file.
+	 * @return
+	 */
 	public String getCookies() {
 		StringBuilder sb = new StringBuilder();
 		for (String cookie : cookies) {
@@ -41,10 +50,18 @@ public class Config {
 		return sb.toString();
 	}
 
+	/**
+	 * Get fb profile URL.
+	 * @return
+	 */
 	public String getFacebookProfileURL() {
 		return facebookProfileURL;
 	}
 
+	/**
+	 * Get the path to where the data should be stored.
+	 * @return
+	 */
 	public String getGexfPath() {
 		return gexpath;
 	}

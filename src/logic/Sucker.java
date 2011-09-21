@@ -35,7 +35,6 @@ public class Sucker implements Callable<ArrayList<String>> {
 		Map<String, String> details = crawl.getDetails(zeroPage);
 		ArrayList<String> friends = crawl.getFriends(zeroPage, this.fbid);
 		try {
-			//todb.setConfig(conf);
 			todb.insertUser(details);
 			todb.insertFriends(friends, this.fbid);
 		} catch (SQLException e1) {

@@ -10,6 +10,11 @@ import org.apache.commons.io.FileUtils;
 public class WriteToFile {
 
 	@SuppressWarnings("static-access")
+	/**
+	 * Create a user folder, write the content of the gexf into a file and copy all necessary files to display the data into the directory.
+	 * @param content
+	 * @param file
+	 */
 	public void writeToFile(String content, String file) {
 		Writer fw = null;
 		FileUtils fu = new FileUtils();
