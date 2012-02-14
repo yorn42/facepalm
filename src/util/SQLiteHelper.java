@@ -132,5 +132,7 @@ public class SQLiteHelper {
 	public Connection getConnection() {
 		return this.connect;
 	}
+	
+	
 
 }

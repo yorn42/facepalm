@@ -14,7 +14,7 @@ public class Crawler {
 	private Pattern findNameRegex = Pattern.compile("<title>[^<]{1,}");
 	private String htmlTags = "<[^>]*>";
 	private Pattern sexRegex = Pattern
-			.compile("Geschlecht<\\\\/th><td class=\\\\\"data\\\\\">.");
+			.compile("Geschlecht<\\/th><td class=\\\"data\\\">.");
 //	private String picPath = "http://profile.ak.fbcdn.net/hprofile-ak-[a-z0-9]{1,}/";
 	private Pattern singleRegex = Pattern
 			.compile("Beziehungsstatus<\\\\/th><td class=\\\\\"data\\\\\">[a-zA-Z0-9\\ \\-\\_]{1,}");
@@ -80,7 +80,7 @@ public class Crawler {
 			return "0";
 		} else
 			return sex.replaceAll(
-					"Geschlecht<\\\\/th><td class=\\\\\"data\\\\\">", "");
+					"Geschlecht<\\/th><td class=\\\"data\\\">", "");
 	}
 
 	private String getSingle(String search) {
@@ -282,5 +282,9 @@ public class Crawler {
 			result.add(m.group());
 		}
 		return result;
+	}
+	
+	public Map<String,String> getStats() {
+		return null;
 	}
 }
