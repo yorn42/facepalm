@@ -1,12 +1,29 @@
+== License ==
 This work is under the GPL 3 License. http://www.gnu.org/licenses/gpl.txt
 
+== Facepalm ==
 facepalm - enduser version of succulent, a facebook stalking tool by yorn.
 
 This Version uses sqlite in memory, so no database is created.
 
-The graph is created by gephi-toolkit.
+The graph is created by the gephi-toolkit.
 
-You need to specify a config file and a Facebook ID (numeric).
+To display the graph you can use gephi or anything else that uses gexf.
+The tool will generate a gexf file and a html file that uses the 
+Gexf Explorer.
+
+== Usage ==
+java -jar facepalm.jar <FBID> <CONFIG>
+
+You need to specify a config file and a Facebook ID (only numeric).
+
+The Facebook ID of your target is either directly in the URL: 
+http://www.facebook.com/profile.php?id=<numeric>
+or, when you run into an alias like:
+http://www.facebook.com/profile.php?id=<string>
+you can find the Facebook ID by viewing the path to the profile picture.
+The ID will be in the jpg name, in the middle of the three numeric values:
+<numeric>_<fbid>_<numeric>_n.jpg
 
 The config file must specify the path to where all the data is dumped to 
 and the contents of your facebook cookie like this:
@@ -26,6 +43,8 @@ cookie=presence=
 
 If your cookie lacks some of the above, just leave it out and give it 
 a shot. Just make sure the cookie is working and logs you into facebook.
+You must be able to see the friends list of the targeted profile with the 
+account represented by the cookie.
 
 Further information can be found here:
 http://www.ccc-mannheim.de/wiki/Facepalm
