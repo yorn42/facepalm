@@ -12,8 +12,20 @@ The config file must specify the path to where all the data is dumped to
 and the contents of your facebook cookie like this:
 
 gexfpath=/tmp
-cookie=xs=
+cookie=locale=
 cookie=c_user=
+cookie=datr=
+cookie=L=
+cookie=act=
+cookie=lu=
+cookie=s=
+cookie=sct=
+cookie=xs=
+cookie=p=
+cookie=presence=
+
+If your cookie lacks some of the above, just leave it out and give it 
+a shot. Just make sure the cookie is working and logs you into facebook.
 
 Further information can be found here:
 http://www.ccc-mannheim.de/wiki/Facepalm
