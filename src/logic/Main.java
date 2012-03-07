@@ -108,7 +108,7 @@ public class Main {
 		System.out.println("[!] Writing gexf file... ");
 		new WriteToFile().writeToFile(graph, conf.getGexfPath() + "/" + args[0]);
 		
-		System.out.println("[!] Check " + conf.getGexfPath() + args[0] + "/index.html for results!");
+		System.out.println("[!] Check " + conf.getGexfPath() + "/" + args[0] + "/index.html for results!");
 		
 		executor.shutdown();
 		todb.die();
