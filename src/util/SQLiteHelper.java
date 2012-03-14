@@ -34,6 +34,7 @@ public class SQLiteHelper {
 				.executeUpdate("create table nodes (label string, url string, id string, sex varchar, single string)");
 		statement
 				.executeUpdate("create table edges (source string, target string, weight integer, name string)");
+		statement.close();
 	}
 
 	public void die() {
@@ -57,6 +58,7 @@ public class SQLiteHelper {
 		preparedStatement = connect.prepareStatement(edges);
 		preparedStatement.execute();
 		preparedStatement.close();
+		
 	}
 
 	/**
@@ -88,6 +90,12 @@ public class SQLiteHelper {
 		preparedStatement.setString(4, details.get("single"));
 		preparedStatement.execute();
 		preparedStatement.close();
+		/*Statement statement = connect.createStatement();
+		ResultSet foo = statement.executeQuery("select * from users");
+		while (foo.next()) {
+			System.out.println(foo.getString("name") + " " + foo.getString("id"));
+		}
+		statement.close();*/
 
 	}
 
@@ -132,7 +140,5 @@ public class SQLiteHelper {
 	public Connection getConnection() {
 		return this.connect;
 	}
-	
-	
 
 }

@@ -15,31 +15,36 @@ public class Crawler {
 	private String htmlTags = "<[^>]*>";
 	private Pattern sexRegex = Pattern
 			.compile("Geschlecht<\\/th><td class=\\\"data\\\">.");
-//	private String picPath = "http://profile.ak.fbcdn.net/hprofile-ak-[a-z0-9]{1,}/";
+	// private String picPath =
+	// "http://profile.ak.fbcdn.net/hprofile-ak-[a-z0-9]{1,}/";
 	private Pattern singleRegex = Pattern
 			.compile("Beziehungsstatus<\\\\/th><td class=\\\\\"data\\\\\">[a-zA-Z0-9\\ \\-\\_]{1,}");
 	private Pattern singleRegexWith = Pattern
-			.compile("Beziehungsstatus<\\\\/th><td class=\\\\\"data\\\\\">[a-zA-Z0-9\\_\\-\\ ]{1,}<[^>]*>"+ common);
-//	private Pattern livesRegex = Pattern.compile("Wohnt in <[^>]*>" + common);
-//	private Pattern birthRegex = Pattern
-//			.compile("Geboren am [0-9\\.\\ a-zA-Z]{1,}");
-//	private Pattern mailRegex = Pattern
-//			.compile("E-Mail</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">[a-zA-Z0-9\\_\\-\\.]{1,}@[a-zA-Z0-9\\_\\-\\.]{1,}");
-//	private Pattern wantsRegex = Pattern
-//			.compile("Interessiert an</th><td class=\"data\">" + common);
-//	private Pattern originRegex = Pattern
-//			.compile("Aus <[^>]*>[a-zA-Z0-9\\_\\-\\ äöüßÖÄÜø,/]{1,}");
-//	private Pattern foneRegex = Pattern
-//			.compile("Telefon</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">[\\ \\.0-9\\+\\-]{1,}");
+			.compile("Beziehungsstatus<\\\\/th><td class=\\\\\"data\\\\\">[a-zA-Z0-9\\_\\-\\ ]{1,}<[^>]*>"
+					+ common);
+	// private Pattern livesRegex = Pattern.compile("Wohnt in <[^>]*>" +
+	// common);
+	// private Pattern birthRegex = Pattern
+	// .compile("Geboren am [0-9\\.\\ a-zA-Z]{1,}");
+	// private Pattern mailRegex = Pattern
+	// .compile("E-Mail</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">[a-zA-Z0-9\\_\\-\\.]{1,}@[a-zA-Z0-9\\_\\-\\.]{1,}");
+	// private Pattern wantsRegex = Pattern
+	// .compile("Interessiert an</th><td class=\"data\">" + common);
+	// private Pattern originRegex = Pattern
+	// .compile("Aus <[^>]*>[a-zA-Z0-9\\_\\-\\ äöüßÖÄÜø,/]{1,}");
+	// private Pattern foneRegex = Pattern
+	// .compile("Telefon</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">[\\ \\.0-9\\+\\-]{1,}");
 	private Pattern facebookIDRegex = Pattern
 			.compile("connect.php\\?profile_id=[0-9]{1,}");
 	private Pattern facebookIDAlt1Regex = Pattern
 			.compile("profile.ak.fbcdn.net\\\\/[a-z0-9\\-]{1,}\\\\/[0-9]{1,}_[0-9]{1,}_[0-9]{1,}_..jpg");
-	private Pattern friendCountRegex = Pattern.compile("Freunde \\([0-9]{1,4}");
+	private Pattern friendCountRegex = Pattern.compile("Freunde .[0-9]{1,4}");
+	private Pattern friendCountRegexTimeline = Pattern
+			.compile("count\">[0-9]{1,}");
 	private Pattern friendListRegex = Pattern
 			.compile("user.php\\?id=[0-9]{1,}");
-//	private Pattern defaultPic = Pattern
-//			.compile("http://profile.ak.fbcdn.net/static-ak/rsrc.php/[a-zA-Z0-9/\\.]{1,}gif");
+	// private Pattern defaultPic = Pattern
+	// .compile("http://profile.ak.fbcdn.net/static-ak/rsrc.php/[a-zA-Z0-9/\\.]{1,}gif");
 	private Pattern locationReplace = Pattern
 			.compile("<script>window.location.replace[.]{1,}");
 
@@ -79,8 +84,8 @@ public class Crawler {
 		if (sex == null) {
 			return "0";
 		} else
-			return sex.replaceAll(
-					"Geschlecht<\\/th><td class=\\\"data\\\">", "");
+			return sex.replaceAll("Geschlecht<\\/th><td class=\\\"data\\\">",
+					"");
 	}
 
 	private String getSingle(String search) {
@@ -99,62 +104,63 @@ public class Crawler {
 
 		return single;
 	}
-//
-//	private String getLives(String search) {
-//		String lives = getRegex(search, livesRegex);
-//		if (lives == null) {
-//			return "NULL";
-//		}
-//		return lives.replaceAll("Wohnt in <[^>]*>", "");
-//	}
-//
-//	private String getBirth(String search) {
-//		String birth = getRegex(search, birthRegex);
-//		if (birth == null) {
-//			return "NULL";
-//		}
-//		return birth.replaceAll("<[^>]*>", "").replaceAll("Geboren am ", "");
-//	}
-//
-//	private String getMail(String search) {
-//		String mail = getRegex(search, mailRegex);
-//		if (mail == null) {
-//			return "NULL";
-//		}
-//		return mail
-//				.replaceAll(
-//						"E-Mail</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">",
-//						"");
-//	}
-//
-//	private String getWants(String search) {
-//		String wants = getRegex(search, wantsRegex);
-//		if (wants == null) {
-//			return "NULL";
-//		}
-//		return wants.replaceAll("Interessiert an</th><td class=\"data\">", "");
-//	}
-//
-//	private String getOrigin(String search) {
-//		String origin = getRegex(search, originRegex);
-//		if (origin == null) {
-//			return "NULL";
-//		}
-//
-//		return origin.replaceAll("Aus <[^>]*>", "");
-//	}
-//
-//	private String getFone(String search) {
-//		String fone = getRegex(search, foneRegex);
-//		if (fone == null) {
-//			return "NULL";
-//		}
-//		return fone
-//				.replaceAll(
-//						"Telefon</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">",
-//						"");
-//	}
-//
+
+	//
+	// private String getLives(String search) {
+	// String lives = getRegex(search, livesRegex);
+	// if (lives == null) {
+	// return "NULL";
+	// }
+	// return lives.replaceAll("Wohnt in <[^>]*>", "");
+	// }
+	//
+	// private String getBirth(String search) {
+	// String birth = getRegex(search, birthRegex);
+	// if (birth == null) {
+	// return "NULL";
+	// }
+	// return birth.replaceAll("<[^>]*>", "").replaceAll("Geboren am ", "");
+	// }
+	//
+	// private String getMail(String search) {
+	// String mail = getRegex(search, mailRegex);
+	// if (mail == null) {
+	// return "NULL";
+	// }
+	// return mail
+	// .replaceAll(
+	// "E-Mail</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">",
+	// "");
+	// }
+	//
+	// private String getWants(String search) {
+	// String wants = getRegex(search, wantsRegex);
+	// if (wants == null) {
+	// return "NULL";
+	// }
+	// return wants.replaceAll("Interessiert an</th><td class=\"data\">", "");
+	// }
+	//
+	// private String getOrigin(String search) {
+	// String origin = getRegex(search, originRegex);
+	// if (origin == null) {
+	// return "NULL";
+	// }
+	//
+	// return origin.replaceAll("Aus <[^>]*>", "");
+	// }
+	//
+	// private String getFone(String search) {
+	// String fone = getRegex(search, foneRegex);
+	// if (fone == null) {
+	// return "NULL";
+	// }
+	// return fone
+	// .replaceAll(
+	// "Telefon</th><td class=\"data\"><ul class=\"uiList\"><li class=\"uiListItem  uiListVerticalItemBorder\">",
+	// "");
+	// }
+	//
 	private String getFBID(String search) {
 		String fbid = getRegex(search, facebookIDRegex);
 		try {
@@ -179,7 +185,7 @@ public class Crawler {
 
 				} catch (NullPointerException nullpe) {
 					//System.out.println("Fail 3");
-					//System.out.println(search);
+					// System.out.println(search);
 					return "Unknown";
 				}
 			}
@@ -187,39 +193,38 @@ public class Crawler {
 
 	}
 
-	/*private String getPicture(String search) {
-		String fbid = getFBID(search);
-		String userpicPath = getRegex(
-				search,
-				Pattern.compile(picPath + "[0-9]{1,}_" + fbid
-						+ "_[0-9]{1,}_..jpg"));
-		if (userpicPath == null) {
-			userpicPath = getRegex(search, defaultPic);
-			if (userpicPath == null) {
-				userpicPath = "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yL/r/HsTZSDw4avx.gif";
-			}
-		}
-
-		PicGetter url = new PicGetter(userpicPath, conf.getCookies());
-		byte[] bytes = null;
-		try {
-			bytes = url.call();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new Base64().encodeToString(bytes).replaceAll("\r\n", "");
-	}*/
+	/*
+	 * private String getPicture(String search) { String fbid = getFBID(search);
+	 * String userpicPath = getRegex( search, Pattern.compile(picPath +
+	 * "[0-9]{1,}_" + fbid + "_[0-9]{1,}_..jpg")); if (userpicPath == null) {
+	 * userpicPath = getRegex(search, defaultPic); if (userpicPath == null) {
+	 * userpicPath =
+	 * "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yL/r/HsTZSDw4avx.gif";
+	 * } }
+	 * 
+	 * PicGetter url = new PicGetter(userpicPath, conf.getCookies()); byte[]
+	 * bytes = null; try { bytes = url.call(); } catch (Exception e) {
+	 * e.printStackTrace(); } return new
+	 * Base64().encodeToString(bytes).replaceAll("\r\n", ""); }
+	 */
 
 	private int getFriendCount(String search) {
 		String counting = getRegex(search, friendCountRegex);
 		if (counting == null) {
-			return 0;
+			counting = getRegex(search, friendCountRegexTimeline);
+			if (counting == null) {
+				return 0;
+			}
+			else {
+				return new Integer(counting.replaceAll("count\">", ""));
+			}
 		}
 		return new Integer(counting.replaceAll("Freunde \\(", ""));
 	}
 
 	public ArrayList<String> getFriends(String search, String fbid) {
 		int friendCount = getFriendCount(search);
+		//System.out.println(friendCount);
 		ArrayList<String> futureFriends = new ArrayList<String>();
 		for (int i = 0; i <= friendCount + 60; i += 59) {
 			String friendurl = "http://www.facebook.com/ajax/browser/list/friends/all/?uid="
@@ -234,14 +239,14 @@ public class Crawler {
 		String dirty = null;
 		for (String futureFriend : futureFriends) {
 
-			dirty += futureFriend.replaceAll("user.php",
-					"\r\nuser.php");
+			dirty += futureFriend.replaceAll("user.php", "\r\nuser.php");
 		}
 		ArrayList<String> cleaned = new ArrayList<String>();
 		for (String clean : getAllRegex(dirty, friendListRegex)) {
 			String temp = clean.replaceAll("user.php\\?id=", "");
 			if (!cleaned.contains(temp)) {
 				cleaned.add(temp);
+				// System.out.println(temp);
 			}
 		}
 		return cleaned;
@@ -254,14 +259,14 @@ public class Crawler {
 		detailMap.put("name", getName(page));
 		detailMap.put("sex", getSex(page));
 		detailMap.put("single", getSingle(page));
-//		detailMap.put("lives", getLives(page));
-//		detailMap.put("birth", getBirth(page));
-//		detailMap.put("mail", getMail(page));
-//		detailMap.put("wants", getWants(page));
-//		detailMap.put("origin", getOrigin(page));
-//		detailMap.put("fone", getFone(page));
+		// detailMap.put("lives", getLives(page));
+		// detailMap.put("birth", getBirth(page));
+		// detailMap.put("mail", getMail(page));
+		// detailMap.put("wants", getWants(page));
+		// detailMap.put("origin", getOrigin(page));
+		// detailMap.put("fone", getFone(page));
 		detailMap.put("fbid", getFBID(page));
-//		detailMap.put("pic", getPicture(page));
+		// detailMap.put("pic", getPicture(page));
 		return detailMap;
 
 	}
@@ -283,8 +288,8 @@ public class Crawler {
 		}
 		return result;
 	}
-	
-	public Map<String,String> getStats() {
+
+	public Map<String, String> getStats() {
 		return null;
 	}
 }

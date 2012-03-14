@@ -83,6 +83,7 @@ public class Main {
 				String fbid = entry.getKey();
 				ArrayList<String> friends = entry.getValue().get();
 				todb.insertFriends(friends, fbid);
+				//System.out.println(fbid);
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
