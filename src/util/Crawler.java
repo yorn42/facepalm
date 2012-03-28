@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import org.apache.commons.codec.binary.Base64;
-
 public class Crawler {
 
 	private String common = "[&#;a-zA-Z0-9_\\-\\ ,/äöüßÄÖÜøéèêôáóíČŁâç\\.]{1,}";

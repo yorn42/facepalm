@@ -14,6 +14,7 @@ import util.Config;
 import util.Crawler;
 import util.GraphCreator;
 import util.SQLiteHelper;
+import util.PartitionCreator;
 import util.WriteToFile;
 
 public class Main {
@@ -31,13 +32,22 @@ public class Main {
 					.println("[X] Usage: succulent <FACEBOOKID> <PATH TO CONFIG FILE>");
 			System.exit(1);
 		}
+		WriteToFile wtf = new WriteToFile();
 
-		// configuration of succulent
+		// configuration of facepalm
 		try {
 			conf = new Config();
 			conf.doConfig(args[1]);
 			crawl = new Crawler(conf);
 			todb = new SQLiteHelper();
+			
+			// Write first stats to file.
+			wtf.setupFiles(conf.getGexfPath() + "/" + args[0]);
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("<a href=\"http://www.facebook.com/profile.php?id="
+					+ args[0] + "\">FBID:</a>", args[0].toString());
+			WriteToFile
+					.writeStatsToFile(hm, conf.getGexfPath() + "/" + args[0]);
 		} catch (IOException e) {
 			System.out.println("[X] Configuration error! Is the config file '"
 					+ args[1] + "' there?");
@@ -60,6 +70,7 @@ public class Main {
 		// get Patient Zero
 		Future<ArrayList<String>> firstFriends = executor.submit(new Sucker(
 				conf, args[0], crawl, todb));
+		
 		// used by the threads, this is the patient zero friend list
 		Map<String, Future<ArrayList<String>>> parallel = new HashMap<String, Future<ArrayList<String>>>();
 
@@ -83,7 +94,7 @@ public class Main {
 				String fbid = entry.getKey();
 				ArrayList<String> friends = entry.getValue().get();
 				todb.insertFriends(friends, fbid);
-				//System.out.println(fbid);
+				// System.out.println(fbid);
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -92,26 +103,32 @@ public class Main {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
 		}
 
-		// write graph
+		// calculate graph
 		String graph = null;
 		try {
 
 			todb.createGraphDB();
-			GraphCreator creator = new GraphCreator(todb);
+			GraphCreator creator = new GraphCreator(todb, conf.getGexfPath()
+					+ "/" + args[0]);
 			System.out.println("[!] Calculating graph... ");
 			graph = creator.createGraphFromSQL();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("[!] Writing gexf file... ");
-		new WriteToFile().writeToFile(graph, conf.getGexfPath() + "/" + args[0]);
-		
-		System.out.println("[!] Check " + conf.getGexfPath() + "/" + args[0] + "/index.html for results!");
-		
+		// shut everything down
 		executor.shutdown();
 		todb.die();
+
+		// write to files
+		System.out.println("[!] Writing gexfs... ");
+		wtf.writeGexf(graph, conf.getGexfPath() + "/" + args[0]);
+		PartitionCreator sc = new PartitionCreator();
+		String parts = sc.createPartitions(conf.getGexfPath() + "/" + args[0]);
+		wtf.writeParts(parts, conf.getGexfPath() + "/" + args[0]);
+		wtf.finalizeFiles(conf.getGexfPath() + "/" + args[0]);
+		System.out.println("[!] Check " + conf.getGexfPath() + "/" + args[0]
+				+ "/index.html for results!");
 	}
 }

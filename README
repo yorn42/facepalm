@@ -9,8 +9,9 @@ This Version uses sqlite in memory, so no database is created.
 The graph is created by the gephi-toolkit.
 
 To display the graph you can use gephi or anything else that uses gexf.
-The tool will generate a gexf file and a html file that uses the 
-Gexf Explorer.
+The tool will generate two gexf files and two html files that use the 
+Gexf Explorer. You can view a graph where gender is in focus or a graph
+where the different communities are shown.
 
 == Usage ==
 java -jar facepalm.jar <FBID> <CONFIG>

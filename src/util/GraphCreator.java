@@ -1,6 +1,7 @@
 package util;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 
 import org.gephi.graph.api.*;
 import org.gephi.io.database.drivers.SQLiteDriver;
@@ -27,8 +28,10 @@ import org.openide.util.Lookup;
 public class GraphCreator {
 	private EdgeListDatabaseImpl db;
 	private Layout layout = null;
+	private String path = "";
 
-	public GraphCreator(SQLiteHelper todb) {
+	public GraphCreator(SQLiteHelper todb, String path) {
+		this.path = path;
 		db = new EdgeListDatabaseImpl();
 		db.setSQLDriver(new SQLiteDriver(todb));
 		db.setNodeQuery("SELECT nodes.id AS id, nodes.label AS label, nodes.url, nodes.sex, nodes.single FROM nodes");
@@ -55,29 +58,45 @@ public class GraphCreator {
 				ImportController.class);
 		GraphModel graphModel = Lookup.getDefault()
 				.lookup(GraphController.class).getModel();
-		
+
 		ImporterEdgeList edgeListImporter = new ImporterEdgeList();
 		Container container = importController.importDatabase(db,
 				edgeListImporter);
 		container.setAllowAutoNode(false); // don't create missing nodes
-		
-		 // force UNDIRECTED
+
+		// force UNDIRECTED
 		container.getLoader().setEdgeDefault(EdgeDefault.UNDIRECTED);
 
 		// append imported data to GraphAPI
 		importController.process(container, new DefaultProcessor(), workspace);
 		NodeIterator ni = graphModel.getGraph().getNodes().iterator();
+		Integer male = 0;
+		Integer female = 0;
+		Integer neutral = 0;
 		while (ni.hasNext()) {
 			Node foo = ni.next();
-			String sex = ((String)foo.getNodeData().getAttributes().getValue("sex"));
+			String sex = ((String) foo.getNodeData().getAttributes()
+					.getValue("sex"));
 			if (sex.compareTo("M") == 0) {
 				foo.getNodeData().setColor(0, 0, 1);
+				male++;
 			}
-			
+
 			else if (sex.compareTo("W") == 0) {
 				foo.getNodeData().setColor(1, 0, 1);
+				female++;
+			} else {
+				neutral++;
 			}
-		}	
+		}
+		
+		// Write stats to files.
+		HashMap<String, String> mp = new HashMap<String, String>();
+		mp.put("Name:", graphModel.getGraph().getNode(1).getNodeData().getLabel());
+		mp.put("male:", male.toString());
+		mp.put("female:", female.toString());
+		mp.put("neutral:", neutral.toString());
+		WriteToFile.writeStatsToFile(mp, path);
 		
 		// layout - 100 Yifan Hu passes
 		layout = new YifanHuLayout(null, new StepDisplacement(1f));
@@ -86,7 +105,8 @@ public class GraphCreator {
 		for (int i = 0; i < 100 && layout.canAlgo(); i++) {
 			layout.goAlgo();
 		}
-
+		
+		// export to gexf
 		ExportController ec = Lookup.getDefault()
 				.lookup(ExportController.class);
 		Exporter exporter = ec.getExporter("gexf");
@@ -98,7 +118,5 @@ public class GraphCreator {
 		result = result.replaceAll("for=\"url\"", "id=\"url\"");
 		return result;
 	}
-
-	
 
 }
